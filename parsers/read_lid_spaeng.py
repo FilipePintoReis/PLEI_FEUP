@@ -1,5 +1,16 @@
+'''
+Contains LinceFileReader
+'''
 
 class LinceFileReader:
+    '''
+    This class read files from lince dataset when given a prefix.
+    The file structure inside the prefix folder is ought to be:
+        prefix/
+            train.conll
+            test.conll
+            dev.conll
+    '''
     @staticmethod
     def train_data(prefix):
         train_str = f"{prefix}/train.conll"
@@ -23,6 +34,3 @@ class LinceFileReader:
         dev_string = dev_file.read()
         dev_file.close()
         return dev_string
-
-
-print(LinceFileReader.train_data('lid_spaeng'))
