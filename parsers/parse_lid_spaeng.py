@@ -2,7 +2,7 @@
 Contains parsers
 '''
 
-from read_lid_spaeng import LinceFileReader
+from .read_lid_spaeng import LinceFileReader
 
 
 # TODO

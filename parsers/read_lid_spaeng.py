@@ -13,6 +13,9 @@ class LinceFileReader:
     '''
     @staticmethod
     def train_data(prefix):
+        '''
+        Returns training data based on a prefix
+        '''
         train_str = f"{prefix}/train.conll"
         train_file = open(train_str, "r", encoding="UTF-8")
         train_string = train_file.read()
@@ -21,6 +24,9 @@ class LinceFileReader:
 
     @staticmethod
     def test_data(prefix):
+        '''
+        Returns test data based on a prefix
+        '''
         test_str = f"{prefix}/test.conll"
         test_file = open(test_str, "r", encoding="UTF-8")
         test_string = test_file.read()
@@ -29,6 +35,9 @@ class LinceFileReader:
 
     @staticmethod
     def dev_data(prefix):
+        '''
+        Returns validation data based on a prefix
+        '''
         dev_str = f"{prefix}/dev.conll"
         dev_file = open(dev_str, "r", encoding="UTF-8")
         dev_string = dev_file.read()
