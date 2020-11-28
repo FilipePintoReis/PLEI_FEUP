@@ -28,8 +28,8 @@ class Word:
         Verbose representation of Word
         '''
         return f'''Word: {self.word}
-                   Label: {self.label}
-                   Word id: {self.word_id}
-                   Pre id: {self.precedent_id}
-                   Post id: {self.postcedent_id}
-                  '''
+Label: {self.label}
+Word id: {self.word_id}
+Pre id: {self.precedent_id}
+Post id: {self.postcedent_id}
+'''

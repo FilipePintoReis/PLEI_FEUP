@@ -38,11 +38,12 @@ class TweetParse(GenericParser):
     def get_annotations(self):
         for tweet in self.get_all_tweets():
             lines = tweet.split('\n')
+            lines = lines[1:]
             for index, line in enumerate(lines):
                 parsed_line = TweetParse.parse_line(line)
 
                 if not parsed_line:
-                    yield None
+                    pass
                 else:
                     precedent = self.counter - 1
                     postcedent = self.counter + 1
@@ -52,3 +53,4 @@ class TweetParse(GenericParser):
                         postcedent = None
 
                     yield Word(parsed_line[0], parsed_line[1], self.counter, precedent, postcedent)
+                    self.counter += 1
