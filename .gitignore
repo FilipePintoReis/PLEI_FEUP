@@ -131,4 +131,4 @@ dmypy.json
 # local settings
 .vscode/*
 .pylintrc
-.e-books/*
+*/e_books/*

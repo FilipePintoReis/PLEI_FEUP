@@ -6,7 +6,7 @@ from src.generic_parser.generic_parser import GenericParser
 from src.generic_parser.word import Word
 from src.tweet_parser.read_lid_spaeng import LinceFileReader
 
-class TweetParse(GenericParser):
+class TweetParser(GenericParser):
     '''
     Parser for tweets
     '''
@@ -40,7 +40,7 @@ class TweetParse(GenericParser):
             lines = tweet.split('\n')
             lines = lines[1:]
             for index, line in enumerate(lines):
-                parsed_line = TweetParse.parse_line(line)
+                parsed_line = TweetParser.parse_line(line)
 
                 if not parsed_line:
                     pass
