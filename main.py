@@ -5,7 +5,7 @@ Main
 # from src.tweet_parser.parse_lid_spaeng import TweetParser
 from src.e_book_preprocess.preprocess import Preprocess
 
-# t = TweetParser('src/lid_spaeng')
+# t = TweetParser('src/LinCE_spaeng')
 
 # for index, word in enumerate(t.get_annotations()):
 #     if index > 10:
