@@ -39,6 +39,8 @@ class TweetParser(GenericParser):
         for tweet in self.get_all_tweets():
             lines = tweet.split('\n')
             lines = lines[1:]
+            len_lines = len(lines)
+
             for index, line in enumerate(lines):
                 parsed_line = TweetParser.parse_line(line)
 
@@ -49,7 +51,7 @@ class TweetParser(GenericParser):
                     postcedent = self.counter + 1
                     if index == 0:
                         precedent = None
-                    if index == len(lines) - 1:
+                    if index == len_lines - 1:
                         postcedent = None
 
                     yield Word(parsed_line[0], parsed_line[1], self.counter, precedent, postcedent)
