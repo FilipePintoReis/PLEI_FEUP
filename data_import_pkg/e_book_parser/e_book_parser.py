@@ -2,8 +2,8 @@
 This module contains a parser for books taken from project gutenberg into word class.
 '''
 
-from src.generic_parser.generic_parser import GenericParser
-from src.generic_parser.word import Word
+from data_import_pkg.generic_parser.generic_parser import GenericParser
+from data_import_pkg.generic_parser.word import Word
 
 class EBookParser(GenericParser):
     '''

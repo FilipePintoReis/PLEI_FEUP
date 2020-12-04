@@ -2,9 +2,9 @@
 Contains parsers
 '''
 
-from src.generic_parser.generic_parser import GenericParser
-from src.generic_parser.word import Word
-from src.tweet_parser.read_lid_spaeng import LinceFileReader
+from data_import_pkg.generic_parser.generic_parser import GenericParser
+from data_import_pkg.generic_parser.word import Word
+from data_import_pkg.tweet_parser.read_lid_spaeng import LinceFileReader
 
 class TweetParser(GenericParser):
     '''
