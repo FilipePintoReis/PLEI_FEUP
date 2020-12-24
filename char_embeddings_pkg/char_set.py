@@ -3,16 +3,24 @@ Module to create CharSet
 '''
 
 class CharSet:
+    '''
+    TODO
+    '''
     @staticmethod
-    def feed_word(s, word):
-        for char in word:
-            s.add(char)
+    def feed_word(char_set, received_word):
+        '''
+        TODO
+        '''
+        for char in received_word:
+            char_set.add(char)
 
     @staticmethod
-    def feed_list_words(l, action):
+    def feed_list_words(list_words, action):
+        '''
+        TODO
+        '''
         s = set()
-        for word in l:
-            self.feed_word(action(word))
-            
-        return s
+        for word in list_words:
+            CharSet.feed_word(s, action(word))
 
+        return s
