@@ -10,7 +10,8 @@ from data_import_pkg.tweet_parser.parse_lid_spaeng import TweetParser
 class RetrieveSentences:
     '''
     RetrieveSentences class takes in the type of parser (Can either be ebook or tweet),
-    a path and language (optional, only used when the path is to a book)
+    a path and language (optional, only used when the path is to a book).
+    Can also receive list of e-books.
     '''
 
     @staticmethod
@@ -18,21 +19,28 @@ class RetrieveSentences:
         '''
         retrieve_sentences is a generator function that yields the sentences.
         In the case of the e-book it's a paragraph, in the case of tweets it's a full tweet.
+        @type_of_parser: e-book, e-books or tweet.
+        @path: Path to tweet folder, path to e-book or list of paths to e-books.
+        @language: a language or list of languages. Only applies to e-books.
         '''
         if type_of_parser == 'e-book':
-            parser = EBookParser(path, language)
+            parsers = [EBookParser(path, language)]
+        elif type_of_parser == 'e-books':
+            parsers = [EBookParser(path[i], language[i]) for i in range(len(path))]
         elif type_of_parser == 'tweet':
-            parser = TweetParser(path)
+            parsers = [TweetParser(path)]
+
 
         sentence = []
 
-        for word in parser.get_annotations():
-            if word.precedent_id is None:
-                sentence = [word.word]
+        for parser in parsers:
+            for word in parser.get_annotations():
+                if word.precedent_id is None:
+                    sentence = [word.word]
 
-            elif word.postcedent_id is None:
-                sentence.append(word.word)
-                yield sentence
+                elif word.postcedent_id is None:
+                    sentence.append(word.word)
+                    yield sentence
 
-            else:
-                sentence.append(word.word)
+                else:
+                    sentence.append(word.word)
