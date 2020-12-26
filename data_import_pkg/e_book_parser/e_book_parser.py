@@ -44,12 +44,12 @@ class EBookParser(GenericParser):
                             precedent = None
                         if index == len_words - 1:
                             postcedent = None
-                
+
                         language = self.language
 
                         if not word.isalpha():
                             language = 'other'
 
                         yield Word(word, language, self.counter, precedent, postcedent)
-                        
+
                         self.counter += 1

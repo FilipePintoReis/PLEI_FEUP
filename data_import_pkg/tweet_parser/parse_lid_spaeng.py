@@ -11,6 +11,9 @@ class TweetParser(GenericParser):
     Parser for tweets
     '''
     def __init__(self, prefix):
+        '''
+        Prefix to lince_spaeng folder
+        '''
         super().__init__()
         self.type = 'Tweet'
         self.prefix = prefix
