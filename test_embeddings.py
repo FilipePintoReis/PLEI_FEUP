@@ -2,14 +2,7 @@
 Use data in pre-trained model.
 '''
 
-import tensorflow as tf
-gpus = tf.config.experimental.list_physical_devices('GPU')
-if gpus:
-  try:
-    for gpu in gpus:
-      tf.config.experimental.set_memory_growth(gpu, True)
-  except RuntimeError as e:
-    print(e)
+from util import tensorflow_cuda
 
 import chars2vec
 import sklearn.decomposition
