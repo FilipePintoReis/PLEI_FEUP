@@ -5,7 +5,6 @@ import chars2vec
 
 from char_embeddings_pkg.util import Util
 from data_import_pkg.tweet_parser.parse_lid_spaeng import TweetParser
-from data_import_pkg.e_book_parser.e_book_parser import EBookParser
 
 parser = TweetParser('data_import_pkg/lince_spaeng')
 
