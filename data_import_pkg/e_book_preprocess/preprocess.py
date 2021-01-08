@@ -17,8 +17,8 @@ class Preprocess:
         file.close()
 
         # Delete header
-        i = raw_content.index('Distributed Proofreading Team.')
-        processed_content = raw_content[i + 37:]
+        i = raw_content.index('***')
+        processed_content = raw_content[i + 30:]
 
         # Delete footer
         i = processed_content.index('END OF THIS PROJECT GUTENBERG EBOOK')
@@ -37,6 +37,6 @@ class Preprocess:
         Function to generate a clean book
         '''
         # Create new file
-        file = open(processed_book_path, "w+", encoding="UTF-8")
+        file = open(processed_book_path + '.txt', "w+", encoding="UTF-8")
         file.write(Preprocess.clean_book(raw_book_path))
         file.close()
