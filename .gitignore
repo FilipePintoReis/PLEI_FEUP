@@ -132,3 +132,4 @@ dmypy.json
 .vscode/*
 .pylintrc
 */e_books/*
+*credentials*
