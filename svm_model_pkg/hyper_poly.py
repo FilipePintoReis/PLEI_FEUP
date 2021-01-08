@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from char_embeddings_pkg.util import Util
 from data_import_pkg.tweet_parser.parse_lid_spaeng import TweetParser
 
-parser = TweetParser('data_import_pkg/lince_spaeng')
+parser = TweetParser('data_import_pkg/lince_spaeng', 'train')
 
 words = []
 labels = []
@@ -42,20 +42,21 @@ scaler_test = StandardScaler().fit(X_test)
 X_train = scaler_train.transform(X_train)
 X_test = scaler_test.transform(X_test)
 
-# params_grid = {'C': [0.001, 0.01, 0.1, 1, 10, 100],
-#           'gamma': ['scale', 'auto'],
-#           'kernel': ['poly'],
-#           'degree': [2,3,4,5,6],
-#           'coef0': [0.001, 0.01, 0.1] }
-
 params_grid = {'C': [0.001, 0.01, 0.1, 1, 10, 100],
-            'kernel': ['rbf'],
-            'gamma': ['scale', 'auto'],}
+          'gamma': ['scale', 'auto'],
+          'kernel': ['poly'],
+          'degree': [2,3,4,5,6],
+          'coef0': [0.001, 0.01, 0.1] }
+
+# params_grid = {'C': [0.001, 0.01, 0.1, 1, 10, 100],
+#             'kernel': ['rbf'],
+#             'gamma': ['scale', 'auto'],}
 
 start = time.time()
 
-#clf = svm.SVC(cache_size=2000, class_weight='balanced')
-clf = svm.SVC(cache_size=200, class_weight='balanced')
+
+clf = svm.SVC(cache_size=2000, class_weight='balanced')
+
 #Create the GridSearchCV object
 grid_clf = GridSearchCV(clf, params_grid)
 
@@ -64,8 +65,11 @@ grid_clf = grid_clf.fit(X_train, y_train)
 
 end = time.time()
 
-with open('howmuchtime.txt', 'w+') as f:
+with open('howmuchtime2.txt', 'w+') as f:
     f.write(str(end - start))
 
-with open('radial_best_estimator', 'w+') as file:
-    file.write(grid_clf.best_estimator_)
+with open('name.txt', 'w+') as f:
+    f.write(str(grid_clf.cv_results_) + '_2')
+
+with open('poly_best_params', 'w+') as file:
+    file.write(str(grid_clf.best_params_))
