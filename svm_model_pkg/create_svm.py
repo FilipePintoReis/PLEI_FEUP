@@ -15,7 +15,7 @@ import chars2vec
 from char_embeddings_pkg.util import Util
 from data_import_pkg.tweet_parser.parse_lid_spaeng import TweetParser
 
-parser = TweetParser('data_import_pkg/lince_spaeng')
+parser = TweetParser('data_import_pkg/lince_spaeng', 'train')
 
 words = []
 labels = []
@@ -31,20 +31,14 @@ word_embeddings = c2v_model.vectorize_words(words)
 # Split dataset into training set and test set
 X_train, X_test, y_train, y_test = train_test_split(word_embeddings,
                     labels,
-                    train_size=0.05,
-                    test_size=0.05,
+                    train_size=0.01,
+                    test_size=0.01,
                     random_state=109
                     )
 
 #Create a svm Classifier
-clf = svm.SVC(cache_size=1000, kernel='poly')
+clf = svm.SVC(cache_size=2000, kernel='poly', coef0=0.1, degree=3, gamma='scale',C=10)
 
-# Polynomial: C, degree, coef0 and gamma
-# Radial Base: C and gamma
-# C, 0 - 1000.
-# gamma, 'scale' or 'auto'
-# degree, 1 - 10
-# coef0, 0 - 1
 
 start = time.time()
 #Train the model using the training sets
