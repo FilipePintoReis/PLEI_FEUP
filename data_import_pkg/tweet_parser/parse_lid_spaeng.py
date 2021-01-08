@@ -10,20 +10,26 @@ class TweetParser(GenericParser):
     '''
     Parser for tweets
     '''
-    def __init__(self, prefix):
+    def __init__(self, prefix, data_type):
         '''
         Prefix to lince_spaeng folder
         '''
         super().__init__()
         self.type = 'Tweet'
         self.prefix = prefix
+        self.data_type = data_type
         self.train_str = LinceFileReader.train_data(self.prefix)
+        self.dev_str = LinceFileReader.dev_data(self.prefix)
         self.counter = 0
 
-    def get_all_tweets(self):
-        """Gets all tweets separated"""
-
+    def get_all_tweets_train(self):
+        """Gets all train tweets separated"""
         for tweet in self.train_str.split('\n\n'):
+            yield tweet
+
+    def get_all_tweets_dev(self):
+        """Gets all dev tweets separated"""
+        for tweet in self.dev_str.split('\n\n'):
             yield tweet
 
     @staticmethod
@@ -39,7 +45,11 @@ class TweetParser(GenericParser):
         return line.split('\t')
 
     def get_annotations(self):
-        for tweet in self.get_all_tweets():
+        '''
+        If self.data_type == train, then retrieves train data, else retrieves dev data.
+        '''
+        gen = (self.get_all_tweets_dev(), self.get_all_tweets_train())[self.data_type == 'train']
+        for tweet in gen:
             lines = tweet.split('\n')
             lines = lines[1:]
             len_lines = len(lines)
