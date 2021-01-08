@@ -2,6 +2,8 @@
 This module contains a parser for books taken from project gutenberg into word class.
 '''
 
+from glob import glob
+
 from data_import_pkg.generic_parser.generic_parser import GenericParser
 from data_import_pkg.generic_parser.word import Word
 
@@ -9,23 +11,35 @@ class EBookParser(GenericParser):
     '''
     This class contains a parser for books taken from project gutenberg into word class.
     '''
-    def __init__(self, path, language):
+    def __init__(self, paths, languages):
         '''
         Constructor.
-        Receives path to the book
+        Receives a path to all books of each language.
+        Language of the books.
         '''
         super().__init__()
-        self.path = path
+        self.paths = paths
         self.type = 'EBook'
-        self.language = language
+        self.languages = languages
         self.counter = 0
 
     def get_annotations(self):
         '''
+        Returns word annotations of all books
+        '''
+
+        for index, path in enumerate(self.paths):
+            for book_path in glob(f'{path}/*.txt'):
+                for word in EBookParser.get_book_annotations(book_path, self.counter, self.languages[index]):
+                    yield word
+
+    @staticmethod
+    def get_book_annotations(path, counter, language):
+        '''
         Returns word annotations
         '''
 
-        file = open(self.path, "r", encoding="UTF-8")
+        file = open(path, "r", encoding="UTF-8")
         book_str = file.read()
 
         for paragraph in book_str.split('\n'):
@@ -37,19 +51,19 @@ class EBookParser(GenericParser):
                 for index, word in enumerate(words):
                     if word != '':
 
-                        precedent = self.counter - 1
-                        postcedent = self.counter + 1
+                        precedent = counter - 1
+                        postcedent = counter + 1
 
                         if index == 0:
                             precedent = None
                         if index == len_words - 1:
                             postcedent = None
 
-                        language = self.language
+                        lang = language
 
                         if not word.isalpha():
-                            language = 'other'
+                            lang = 'other'
 
-                        yield Word(word, language, self.counter, precedent, postcedent)
+                        yield Word(word, lang, counter, precedent, postcedent)
 
-                        self.counter += 1
+                        counter += 1
