@@ -5,8 +5,16 @@ from math import ceil
 from random import choice, randint
 import string
 
+import numpy as np
+
 from Levenshtein import distance
 
+class Hashable:
+    '''
+    Utilitary class to hash unhashable data structures.
+    '''
+    def __init__(self, unhashable):
+        self.unhashable = unhashable
 
 class Util:
     '''
@@ -28,9 +36,8 @@ class Util:
         char_set = set()
         for word in list_words:
             Util.populate_char_set_word(char_set, word)
-
         Util.populate_char_set_princtable(char_set)
- 
+
         return char_set
 
     @staticmethod
@@ -44,7 +51,6 @@ class Util:
     @staticmethod
     def process_list_words(list_words):
         '''
-        TODO test
         Receives list of words, creates character set and x and y train from it.
         '''
         x_train = []
@@ -122,3 +128,43 @@ class Util:
 
         print("\n\n No different word could be found after 10 retries.")
         return (word, new_word)
+
+    @staticmethod
+    def word_id_embed_dict(dict_word_embedding, words):
+        dict_id_embedding = {}
+        for word in words:
+            dict_id_embedding[word.word_id] = dict_word_embedding[word.word]
+
+        return dict_id_embedding
+
+    @staticmethod
+    def word_feature_mixer(dictionary, word, size):
+        '''
+        Receives a dictionary mapping word_ids and their embeddings,
+        a word_id and the length of the embeddings.
+        Returns the concatenation of the current word plus pre and pos words.
+        '''
+        precedent_emb = dictionary[word.precedent_id].unhashable if not word.precedent_id is None else np.array(np.zeros(size))
+        current_emb = dictionary[word.word_id].unhashable
+        postcedent_emb = dictionary[word.postcedent_id].unhashable if not word.postcedent_id is None else np.array(np.zeros(size))
+
+        return np.concatenate((precedent_emb, current_emb, postcedent_emb))
+
+    @staticmethod
+    def dictionary_embeddings(c2v_model, words):
+        '''
+        For a list of words, retrieves the correspondent embeddings
+        '''
+        word_set = set()
+        for word in words:
+            if word not in word_set:
+                word_set.add(word)
+
+        new_list = list(word_set)
+        vectorized = c2v_model.vectorize_words(new_list)
+
+        word_dict = {}
+        for i, word in enumerate(new_list):
+            word_dict[word] = Hashable(vectorized[i])
+
+        return word_dict
