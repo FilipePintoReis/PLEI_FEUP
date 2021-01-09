@@ -28,7 +28,7 @@ class RetrieveSentences:
         elif type_of_parser == 'e-books':
             parsers = [EBookParser(path[i], language[i]) for i in range(len(path))]
         elif type_of_parser == 'tweet':
-            parsers = [TweetParser(path)]
+            parsers = [TweetParser(path, 'train')]
 
 
         sentence = []

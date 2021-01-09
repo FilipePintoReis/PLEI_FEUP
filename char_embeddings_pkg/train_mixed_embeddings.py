@@ -1,6 +1,7 @@
 '''
 Main
 '''
+from traceback import print_exc
 import chars2vec
 
 from char_embeddings_pkg.util import Util
@@ -66,9 +67,12 @@ try:
     message = 'Finished train_mixed_embeddings'
     EmailSender.send_email(server, 'filipepintodosreis@gmail.com', message)
 
-except:
+except Exception as ex:
     message = 'Failed during train_mixed_embeddings'
-    EmailSender.send_email(server, 'filipepintodosreis@gmail.com', message)
+    template = "An exception of type {0} occurred.\nException: {1}\nStack trace: {2}"
+    err = template.format(type(ex).__name__, ex, print_exc())
+    print(err)
+    EmailSender.send_email(server, 'filipepintodosreis@gmail.com', message + '\n\n' + err)
 
 finally:
     server.quit()

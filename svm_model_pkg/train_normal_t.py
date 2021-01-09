@@ -2,6 +2,7 @@
 Script to create svm
 '''
 
+from traceback import print_exc
 from joblib import dump
 
 from sklearn.model_selection import train_test_split
@@ -10,43 +11,56 @@ import chars2vec
 
 from util import tensorflow_cuda
 from data_import_pkg.tweet_parser.parse_lid_spaeng import TweetParser
+from email_pkg.email_sender import EmailSender
 
-parser = TweetParser('data_import_pkg/lince_spaeng', 'train')
+server = EmailSender.start_server()
 
-words = []
-labels = []
-for word in parser.get_annotations():
-    words.append(word.word)
-    labels.append(word.label)
+try:
+    parser = TweetParser('data_import_pkg/lince_spaeng', 'train')
 
-c2v_model = chars2vec.load_model('trained_models/char_embeddings/tweet')
+    words = []
+    labels = []
+    for word in parser.get_annotations():
+        words.append(word.word)
+        labels.append(word.label)
 
-word_embeddings = c2v_model.vectorize_words(words)
+    c2v_model = chars2vec.load_model('trained_models/char_embeddings/tweet')
 
-###############################      Polynomial        ###############################################
-X_train, _, y_train, _ = train_test_split(word_embeddings,
-                    labels,
-                    train_size=0.9999,
-                    random_state=109
-                    )
+    word_embeddings = c2v_model.vectorize_words(words)
 
-clf = svm.SVC(cache_size=2000, kernel='poly', coef0=0.1, degree=3, gamma='scale', C=100)
+    ###############################      Polynomial        ###############################################
+    X_train, _, y_train, _ = train_test_split(word_embeddings,
+                        labels,
+                        train_size=0.9999,
+                        random_state=109
+                        )
 
-clf.fit(X_train, y_train)
+    clf = svm.SVC(cache_size=2000, kernel='poly', coef0=0.1, degree=3, gamma='scale', C=100)
 
-dump(clf, 'trained_models/svm/tweet/polynomial_normal_t')
-###############################      Polynomial        ###############################################
+    clf.fit(X_train, y_train)
 
-###############################        Radial          ###############################################
-X_train, X_test, y_train, y_test = train_test_split(word_embeddings,
-                    labels,
-                    train_size=0.9999,
-                    random_state=109
-                    )
+    dump(clf, 'trained_models/svm/tweet/polynomial_normal_t')
+    ###############################      Polynomial        ###############################################
 
-clf = svm.SVC(cache_size=2000, kernel='rbf', C=100, gamma='auto')
+    ###############################        Radial          ###############################################
+    X_train, X_test, y_train, y_test = train_test_split(word_embeddings,
+                        labels,
+                        train_size=0.9999,
+                        random_state=109
+                        )
 
-clf.fit(X_train, y_train)
+    clf = svm.SVC(cache_size=2000, kernel='rbf', C=100, gamma='auto')
 
-dump(clf, 'trained_models/svm/tweet/rbf_normal_t')
-###############################        Radial          ###############################################
+    clf.fit(X_train, y_train)
+
+    dump(clf, 'trained_models/svm/tweet/rbf_normal_t')
+    ###############################        Radial          ###############################################
+except Exception as ex:
+    message = 'Error while training one of the tweeter models'
+    template = "An exception of type {0} occurred.\nException: {1}\nStack trace: {2}"
+    err = template.format(type(ex).__name__, ex, print_exc())
+    print(err)
+    EmailSender.send_email(server, 'filipepintodosreis@gmail.com', message + '\n\n' + err)
+
+finally:
+    server.quit()
